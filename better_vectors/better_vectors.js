@@ -1,5 +1,3 @@
-import * as mc from "@minecraft/server";
-
 export class bVector2 {
   constructor(x, y) {
     // Prepare basic vector variables
