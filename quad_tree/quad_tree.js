@@ -149,4 +149,17 @@ class QuadTree {
 
     return results;
   }
+
+  clear() {
+    this.elements = [];
+    this.neu = undefined;
+    this.nwu = undefined;
+    this.seu = undefined;
+    this.swu = undefined;
+    this.ned = undefined;
+    this.nwd = undefined;
+    this.sed = undefined;
+    this.swd = undefined;
+    this.divided = false;
+  }
 }
