@@ -1,4 +1,4 @@
-class Boundary {
+class CubeArea {
   constructor(x, y, z, w, h, d) {
     this.x = x;
     this.y = y;
@@ -31,6 +31,41 @@ class Boundary {
   }
 }
 
+class SphericalArea {
+  constructor(x, y, z, r) {
+    this.x = x;
+    this.y = y;
+    this.z = z;
+    this.r = r;
+    this.rSquared = this.r * this.r;
+  }
+
+  contains(point) {
+    let d = Math.pow(point.x - this.x, 2) + Math.pow(point.y - this.y, 2) + Math.pow(point.z - this.z, 2);
+    return d <= this.rSquared;
+  }
+
+  intersects(range) {
+    let xDist = Math.abs(range.x - this.x);
+    let yDist = Math.abs(range.y - this.y);
+    let zDist = Math.abs(range.z - this.z);
+
+    let r = this.r;
+
+    let w = range.w / 2;
+    let h = range.h / 2;
+    let d = range.d / 2;
+
+    let edges = Math.pow(xDist - w, 2) + Math.pow(yDist - h, 2) + Math.pow(zDist - h, 2);
+
+    if (xDist > r + w || yDist > r + h || zDist > r + d) return false;
+
+    if (xDist <= w || yDist <= h || zDist <= d) return true;
+
+    return edges <= this.rSquared;
+  }
+}
+
 class QuadTree {
   constructor(boundary, capacity) {
     this.boundary = boundary;
@@ -55,7 +90,7 @@ class QuadTree {
   }
 
   subdivide() {
-    let neu = new Boundary(
+    let neu = new CubeArea(
       this.boundary.x + this.boundary.w / 2,
       this.boundary.y - this.boundary.h / 2,
       this.boundary.z + this.boundary.d / 2,
@@ -63,7 +98,7 @@ class QuadTree {
       this.boundary.h / 2,
       this.boundary.d / 2
     );
-    let nwu = new Boundary(
+    let nwu = new CubeArea(
       this.boundary.x - this.boundary.w / 2,
       this.boundary.y - this.boundary.h / 2,
       this.boundary.z + this.boundary.d / 2,
@@ -71,7 +106,7 @@ class QuadTree {
       this.boundary.h / 2,
       this.boundary.d / 2
     );
-    let seu = new Boundary(
+    let seu = new CubeArea(
       this.boundary.x + this.boundary.w / 2,
       this.boundary.y + this.boundary.h / 2,
       this.boundary.z + this.boundary.d / 2,
@@ -79,7 +114,7 @@ class QuadTree {
       this.boundary.h / 2,
       this.boundary.d / 2
     );
-    let swu = new Boundary(
+    let swu = new CubeArea(
       this.boundary.x - this.boundary.w / 2,
       this.boundary.y + this.boundary.h / 2,
       this.boundary.z + this.boundary.d / 2,
@@ -87,7 +122,7 @@ class QuadTree {
       this.boundary.h / 2,
       this.boundary.d / 2
     );
-    let ned = new Boundary(
+    let ned = new CubeArea(
       this.boundary.x + this.boundary.w / 2,
       this.boundary.y - this.boundary.h / 2,
       this.boundary.z - this.boundary.d / 2,
@@ -95,7 +130,7 @@ class QuadTree {
       this.boundary.h / 2,
       this.boundary.d / 2
     );
-    let nwd = new Boundary(
+    let nwd = new CubeArea(
       this.boundary.x - this.boundary.w / 2,
       this.boundary.y - this.boundary.h / 2,
       this.boundary.z - this.boundary.d / 2,
@@ -103,7 +138,7 @@ class QuadTree {
       this.boundary.h / 2,
       this.boundary.d / 2
     );
-    let sed = new Boundary(
+    let sed = new CubeArea(
       this.boundary.x + this.boundary.w / 2,
       this.boundary.y + this.boundary.h / 2,
       this.boundary.z - this.boundary.d / 2,
@@ -111,7 +146,7 @@ class QuadTree {
       this.boundary.h / 2,
       this.boundary.d / 2
     );
-    let swd = new Boundary(
+    let swd = new CubeArea(
       this.boundary.x - this.boundary.w / 2,
       this.boundary.y + this.boundary.h / 2,
       this.boundary.z - this.boundary.d / 2,
