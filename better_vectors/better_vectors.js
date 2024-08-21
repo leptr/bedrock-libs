@@ -32,6 +32,21 @@ export class bVector2 {
     }
   }
 
+  // add method allows the user to perform addition with the provided vector
+  static add(vec1, vec2) {
+    if (vec1 === undefined || vec2 === undefined) {
+      // Handle bad arguments
+      console.error("No vector has been passed to the bVector2 add function");
+      return null;
+    } else {
+      let newVec = vec1.copy();
+      // Add the provided vector
+      newVec.x += vec2.x;
+      newVec.y += vec2.y;
+      return newVec;
+    }
+  }
+
   // subtract method allows the user to perform subtraction with the provided vector
   subtract(vec2) {
     if (vec2 === undefined) {
@@ -44,6 +59,21 @@ export class bVector2 {
     }
   }
 
+  // subtract method allows the user to perform subtraction with the provided vector
+  static subtract(vec1, vec2) {
+    if (vec1 === undefined || vec2 === undefined) {
+      // Handle bad arguments
+      console.error("No vector has been passed to the bVector2 subtract function");
+      return null;
+    } else {
+      let newVec = vec1.copy();
+      // Subtract the provided vector
+      newVec.x -= vec2.x;
+      newVec.y -= vec2.y;
+      return newVec;
+    }
+  }
+
   // multiply method allows the user to perform multiplication with the provided vector
   multiply(num) {
     if (num === undefined) num = 1;
@@ -51,11 +81,41 @@ export class bVector2 {
     this.y *= num;
   }
 
+  // multiply method allows the user to perform multiplication with the provided vector
+  static multiply(vec, num) {
+    if (vec === undefined) {
+      // Handle bad arguments
+      console.error("No vector has been passed to the bVector2 multiply function");
+      return null;
+    } else {
+      let newVec = vec.copy();
+      if (num === undefined) num = 1;
+      newVec.x *= num;
+      newVec.y *= num;
+      return vec;
+    }
+  }
+
   // divide method allows the user to perform division with the provided vector
   divide(num) {
     if (num === undefined) num = 1;
     num = 1 / num;
     this.multiply(num);
+  }
+
+  // multiply method allows the user to perform multiplication with the provided vector
+  static divide(vec, num) {
+    if (vec === undefined) {
+      // Handle bad arguments
+      console.error("No vector has been passed to the bVector2 divide function");
+      return null;
+    } else {
+      let newVec = vec.copy();
+      if (num === undefined) num = 1;
+      newVec.x /= num;
+      newVec.y /= num;
+      return vec;
+    }
   }
 
   // angle method allows the user to get the angle of the vector
@@ -133,6 +193,13 @@ export class bVector2 {
     else return sqrt(sqr(this.x - vec2.x) + sqr(this.y - vec2.y));
   }
 
+  // distance method allows the user to get the distance to another vector
+  static distance(vec1, vec2) {
+    // Handle bad arguments
+    if (vec2 === undefined) console.error("bVector2 distance method expects two instances of bVector2");
+    else return sqrt(sqr(this.x - vec2.x) + sqr(this.y - vec2.y));
+  }
+
   // lerp method allows the user to lerp the vector towards another vector over time
   lerp(vec2, step) {
     // Handle bad arguments
@@ -140,6 +207,20 @@ export class bVector2 {
     else {
       this.x = (1 - step) * this.x + step * vec2.x;
       this.y = (1 - step) * this.y + step * vec2.y;
+    }
+  }
+
+  // lerp method allows the user to lerp the vector towards another vector over time
+  static lerp(vec1, vec2, step) {
+    // Handle bad arguments
+    if (vec1 === undefined || vec2 === undefined || step === undefined) {
+      console.error("Invalid arguments for the bVector2 lerp method");
+      return null;
+    } else {
+      let newVec = vec1.copy();
+      newVec.x = (1 - step) * newVec.x + step * vec2.x;
+      newVec.y = (1 - step) * newVec.y + step * vec2.y;
+      return newVec;
     }
   }
 
@@ -178,9 +259,27 @@ export class bVector2 {
     return this.x * vec2.y - vec2.x * this.y;
   }
 
+  // crossProduct method returns the cross product of this vector and the provided vector
+  static crossProduct(vec1, vec2) {
+    if (vec1 === undefined || vec2 === undefined) {
+      console.error("No valid arguments provided to the bVector2 crossProduct method");
+      return null;
+    }
+    return vec1.x * vec2.y - vec2.x * vec1.y;
+  }
+
   // dotProduct method returns the dot product of two vectors
   dotProduct(vec2) {
     return this.x * vec2.x + this.y * vec2.y;
+  }
+
+  // dotProduct method returns the dot product of two vectors
+  static dotProduct(vec1, vec2) {
+    if (vec1 === undefined || vec2 === undefined) {
+      console.error("No valid arguments provided to the bVector2 dotProduct method");
+      return null;
+    }
+    return vec1.x * vec2.x + vec1.y * vec2.y;
   }
 }
 
@@ -222,6 +321,22 @@ export class bVector3 {
     }
   }
 
+  // add method allows the user to perform addition with the provided vector
+  static add(vec1, vec2) {
+    if (vec1 === undefined || vec2 === undefined) {
+      // Handle bad arguments
+      console.error("No vector has been passed to the bVector3 add function");
+      return null;
+    } else {
+      let newVec = vec1.copy();
+      // Add the provided vector
+      newVec.x += vec2.x;
+      newVec.y += vec2.y;
+      newVec.z += vec2.z;
+      return newVec;
+    }
+  }
+
   // subtract method allows the user to perform subtraction with the provided vector
   subtract(vec2) {
     if (vec2 === undefined) {
@@ -235,6 +350,22 @@ export class bVector3 {
     }
   }
 
+  // subtract method allows the user to perform subtraction with the provided vector
+  static subtract(vec1, vec2) {
+    if (vec1 === undefined || vec2 === undefined) {
+      // Handle bad arguments
+      console.error("No vector has been passed to the bVector3 subtract function");
+      return null;
+    } else {
+      let newVec = vec1.copy();
+      // Subtract the provided vector
+      newVec.x -= vec2.x;
+      newVec.y -= vec2.y;
+      newVec.z -= vec2.z;
+      return newVec;
+    }
+  }
+
   // multiply method allows the user to perform multiplication with the provided vector
   multiply(num) {
     if (num === undefined) num = 1;
@@ -243,11 +374,43 @@ export class bVector3 {
     this.z *= num;
   }
 
+  // multiply method allows the user to perform multiplication with the provided vector
+  static multiply(vec, num) {
+    if (vec === undefined) {
+      // Handle bad arguments
+      console.error("No vector has been passed to the bVector3 multiply function");
+      return null;
+    } else {
+      let newVec = vec.copy();
+      if (num === undefined) num = 1;
+      newVec.x *= num;
+      newVec.y *= num;
+      newVec.z *= num;
+      return newVec;
+    }
+  }
+
   // divide method allows the user to perform division with the provided vector
   divide(num) {
     if (num === undefined) num = 1;
     num = 1 / num;
     this.multiply(num);
+  }
+
+  // multiply method allows the user to perform multiplication with the provided vector
+  static divide(vec, num) {
+    if (vec === undefined) {
+      // Handle bad arguments
+      console.error("No vector has been passed to the bVector3 divide function");
+      return null;
+    } else {
+      let newVec = vec.copy();
+      if (num === undefined) num = 1;
+      newVec.x /= num;
+      newVec.y /= num;
+      newVec.z /= num;
+      return newVec;
+    }
   }
 
   // angle method allows the user to get the angle of the vector
@@ -350,11 +513,28 @@ export class bVector3 {
   // lerp method allows the user to lerp the vector towards another vector over time
   lerp(vec2, step) {
     // Handle bad arguments
-    if (vec2 === undefined || step === undefined) console.error("Invalid arguments for the bVector3 lerp method");
-    else {
+    if (vec2 === undefined || step === undefined) {
+      console.error("Invalid arguments for the bVector3 lerp method");
+      return null;
+    } else {
       this.x = (1 - step) * this.x + step * vec2.x;
       this.y = (1 - step) * this.y + step * vec2.y;
       this.z = (1 - step) * this.z + step * vec2.z;
+    }
+  }
+
+  // lerp method allows the user to lerp the vector towards another vector over time
+  static lerp(vec1, vec2, step) {
+    // Handle bad arguments
+    if (vec1 === undefined || vec2 === undefined || step === undefined) {
+      console.error("Invalid arguments for the bVector3 lerp method");
+      return null;
+    } else {
+      let newVec = vec1.copy();
+      newVec.x = (1 - step) * newVec.x + step * vec2.x;
+      newVec.y = (1 - step) * newVec.y + step * vec2.y;
+      newVec.z = (1 - step) * newVec.z + step * vec2.z;
+      return newVec;
     }
   }
 
@@ -404,8 +584,29 @@ export class bVector3 {
     return new bVector3(x, y, z);
   }
 
+  // crossProduct method returns the cross product of two vectors
+  static crossProduct(vec1, vec2) {
+    if (vec1 === undefined || vec2 === undefined) {
+      console.error("No valid argument provided to the bVector3 crossProduct method");
+      return null;
+    }
+    let x = vec1.y * vec2.z - vec1.z * vec2.y;
+    let y = vec1.z * vec2.x - vec1.x * vec2.z;
+    let z = vec1.x * vec2.y - vec1.y * vec2.x;
+    return new bVector3(x, y, z);
+  }
+
   // dotProduct method returns the dot product of two vectors
   dotProduct(vec2) {
     return this.x * vec2.x + this.y * vec2.y + this.z * vec2.z;
+  }
+
+  // dotProduct method returns the dot product of two vectors
+  static dotProduct(vec1, vec2) {
+    if (vec1 === undefined || vec2 === undefined) {
+      console.error("No valid argument provided to the bVector3 dotProduct method");
+      return null;
+    }
+    return vec1.x * vec2.x + vec1.y * vec2.y + vec1.z * vec2.z;
   }
 }
