@@ -1,3 +1,7 @@
+// Developed by: leptr
+// GitHub: https://github.com/leptr
+// Repo: https://github.com/leptr/bedrock-libs
+
 // clamp function constrains the given number between the given min and max values
 export const clamp = (num, min, max) => {
   if (num < min) return min;

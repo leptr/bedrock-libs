@@ -1,3 +1,7 @@
+// Developed by: leptr
+// GitHub: https://github.com/leptr
+// Repo: https://github.com/leptr/bedrock-libs
+
 export class Matrix {
   constructor(rows, cols) {
     this.rows = rows;

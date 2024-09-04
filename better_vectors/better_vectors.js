@@ -1,3 +1,7 @@
+// Developed by: leptr
+// GitHub: https://github.com/leptr
+// Repo: https://github.com/leptr/bedrock-libs
+
 export class bVector2 {
   constructor(x, y) {
     // Prepare basic vector variables

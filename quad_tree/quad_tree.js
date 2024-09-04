@@ -1,3 +1,7 @@
+// Developed by: leptr
+// GitHub: https://github.com/leptr
+// Repo: https://github.com/leptr/bedrock-libs
+
 class CubeArea {
   constructor(x, y, z, w, h, d) {
     this.x = x;
