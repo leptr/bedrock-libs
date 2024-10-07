@@ -2,6 +2,12 @@
 // GitHub: https://github.com/leptr
 // Repo: https://github.com/leptr/bedrock-libs
 
+import * as mc from "@minecraft/server";
+
+function sqr(num) {
+  return num * num;
+}
+
 export class bVector2 {
   constructor(x, y) {
     // Prepare basic vector variables
@@ -124,7 +130,7 @@ export class bVector2 {
 
   // angle method allows the user to get the angle of the vector
   angle() {
-    return (atan(this.y / this.x) * 180) / PI;
+    return (Math.atan(this.y / this.x) * 180) / Math.PI;
   }
 
   // rotate method allows the user to rotate the vector by the given angle
@@ -132,13 +138,13 @@ export class bVector2 {
     let previousX = this.x;
     let previousY = this.y;
 
-    this.x = cos(angle) * previousX - sin(angle) * previousY;
-    this.y = sin(angle) * previousX + cos(angle) * previousY;
+    this.x = Math.cos(angle) * previousX - Math.sin(angle) * previousY;
+    this.y = Math.sin(angle) * previousX + Math.cos(angle) * previousY;
   }
 
   // magnitude method allows the user to get the magnitude of the vector
   magnitude() {
-    return sqrt(sqr(this.x) + sqr(this.y));
+    return Math.sqrt(sqr(this.x) + sqr(this.y));
   }
 
   // magnitudeSqr method allows the user to get the squared magnitude of the vector
@@ -148,7 +154,7 @@ export class bVector2 {
 
   // setMagnitude method allows the user to update the vector magnitude
   setMagnitude(newMag) {
-    let mag = sqrt(sqr(this.x) + sqr(this.y));
+    let mag = Math.sqrt(sqr(this.x) + sqr(this.y));
     let ratio = newMag / mag;
 
     this.x *= ratio;
@@ -178,7 +184,7 @@ export class bVector2 {
   normalize() {
     let tmp = new bVector2(this.x, this.y);
 
-    let mag = sqrt(sqr(tmp.x) + sqr(tmp.y));
+    let mag = Math.sqrt(sqr(tmp.x) + sqr(tmp.y));
 
     tmp.x = tmp.x / mag;
     tmp.y = tmp.y / mag;
@@ -194,14 +200,14 @@ export class bVector2 {
   distance(vec2) {
     // Handle bad arguments
     if (vec2 === undefined) console.error("You need to pass another bVector2 instance to the bVector2 distance method");
-    else return sqrt(sqr(this.x - vec2.x) + sqr(this.y - vec2.y));
+    else return Math.sqrt(sqr(this.x - vec2.x) + sqr(this.y - vec2.y));
   }
 
   // distance method allows the user to get the distance to another vector
   static distance(vec1, vec2) {
     // Handle bad arguments
     if (vec2 === undefined) console.error("bVector2 distance method expects two instances of bVector2");
-    else return sqrt(sqr(this.x - vec2.x) + sqr(this.y - vec2.y));
+    else return Math.sqrt(sqr(vec1.x - vec2.x) + sqr(vec1.y - vec2.y));
   }
 
   // lerp method allows the user to lerp the vector towards another vector over time
@@ -418,9 +424,16 @@ export class bVector3 {
   }
 
   // angle method allows the user to get the angle of the vector
-  angle(degrees) {
-    if (degrees != undefined) return (atan(this.y / this.x) * 180) / PI;
-    return atan(this.y / this.x);
+  angles(degrees) {
+    if (degrees != undefined) {
+      let theta = (Math.atan2(this.x, this.z) * -180) / Math.PI;
+      let phi = (Math.atan(this.y / Math.sqrt(sqr(this.x) + sqr(this.z))) * 180) / Math.PI;
+      return { theta, phi };
+    }
+
+    let theta = Math.atan(this.z / this.x);
+    let phi = Math.atan(this.y / Math.sqrt(sqr(this.x) + sqr(this.z)));
+    return { theta, phi };
   }
 
   // rotateX method allows the user to rotate the vector on the X axis by the given angle
@@ -455,7 +468,7 @@ export class bVector3 {
 
   // magnitude method allows the user to get the magnitude of the vector
   magnitude() {
-    return sqrt(sqr(this.x) + sqr(this.y) + sqr(this.z));
+    return Math.sqrt(sqr(this.x) + sqr(this.y) + sqr(this.z));
   }
 
   // magnitudeSqr method allows the user to get the squared magnitude of the vector
@@ -465,7 +478,7 @@ export class bVector3 {
 
   // setMagnitude method allows the user to update the vector magnitude
   setMagnitude(newMag) {
-    let mag = sqrt(sqr(this.x) + sqr(this.y) + sqr(this.z));
+    let mag = Math.sqrt(sqr(this.x) + sqr(this.y) + sqr(this.z));
     let ratio = newMag / mag;
 
     this.x *= ratio;
@@ -494,24 +507,25 @@ export class bVector3 {
 
   // normalize method allows the user to normalize the vector/set its magnitude to 1
   normalize() {
-    let tmp = new bVector3(this.x, this.y, this.z);
-
-    let mag = sqrt(sqr(tmp.x) + sqr(tmp.y) + sqr(tmp.z));
-
-    tmp.x = tmp.x / mag;
-    tmp.y = tmp.y / mag;
-    tmp.z = tmp.z / mag;
-
-    this.x = tmp.x;
-    this.y = tmp.y;
-    this.z = tmp.y;
+    let mag = this.magnitude();
+    let temp = this.copy();
+    this.x = temp.x / mag;
+    this.y = temp.y / mag;
+    this.z = temp.z / mag;
   }
 
   // distance method allows the user to get the distance to another vector
   distance(vec2) {
     // Handle bad arguments
     if (vec2 === undefined) console.error("You need to pass another bVector3 instance to the bVector3 distance method");
-    else return sqrt(sqr(this.x - vec2.x) + sqr(this.y - vec2.y) + sqr(this.z - vec2.z));
+    else return Math.sqrt(sqr(this.x - vec2.x) + sqr(this.y - vec2.y) + sqr(this.z - vec2.z));
+  }
+
+  // distance method allows the user to get the distance to another vector
+  static distance(vec1, vec2) {
+    // Handle bad arguments
+    if (vec1 === undefined) console.error("bVector3 distance method expects two instances of bVector2");
+    else return Math.sqrt(sqr(vec1.x - vec2.x) + sqr(vec1.y - vec2.y) + sqr(vec1.z - vec2.z));
   }
 
   // lerp method allows the user to lerp the vector towards another vector over time
@@ -555,6 +569,11 @@ export class bVector3 {
   // fromVector3 method returns a bVector3 from the provided Vector3
   static fromVector3(vec2) {
     return new bVector3(vec2.x, vec2.y, vec2.z);
+  }
+
+  // toVector3 method returns a Vector3 from the bVector3
+  toVector3() {
+    return { x: this.x, y: this.y, z: this.z };
   }
 
   // fromAngles method returns a bVector3 from 2 provided angles

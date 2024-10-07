@@ -87,12 +87,12 @@ export const abs = (num) => {
 
 // sin function returns the sine value of the provided angle
 export const sin = (angle) => {
-  return Math.sin((angle * PI) / 180);
+  return Math.sin((angle * Math.PI) / 180);
 };
 
 // cos function returns the cosine value of the provided angle
 export const cos = (angle) => {
-  return Math.cos((angle * PI) / 180);
+  return Math.cos((angle * Math.PI) / 180);
 };
 
 // acos function returns the arc cosine value of the provided angle
