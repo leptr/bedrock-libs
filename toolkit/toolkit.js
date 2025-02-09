@@ -1,4 +1,4 @@
-// Developed by: leptr
+// Developed by: Petar Mijailovic (leptr)
 // GitHub: https://github.com/leptr
 // Repo: https://github.com/leptr/bedrock-libs
 
@@ -132,34 +132,50 @@ export function enablePlayerCamera(player) {
   player.runCommand("/inputpermission set @s camera enabled");
 }
 
-export function getAllDimensions(filter, sourceId, checkForBlocks) {
+export function getAllDimensions(filter, sourceId) {
   let result = [];
-  for (const dimension of [mc.world.getDimension("overworld"), mc.world.getDimension("nether"), mc.world.getDimension("the_end")]) {
+  for (const dimension of [
+    mc.world.getDimension("overworld"),
+    mc.world.getDimension("nether"),
+    mc.world.getDimension("the_end"),
+  ]) {
     let entityFilter = filter;
 
     dimension.getEntities(entityFilter).forEach((entity) => {
       if (sourceId === undefined || entity.id !== sourceId) {
-        if (!checkForBlocks) result.push(entity);
-        else {
-          const source = mc.world.getEntity(sourceId);
-
-          const sPos = source.getHeadLocation();
-          const tPos = entity.location;
-          const dir = bVector3.subtract(sPos, tPos);
-
-          const dist = Math.round(bVector3.distance(sPos, tPos));
-
-          if (
-            dimension.getBlockFromRay(sPos, dir, {
-              maxDistance: dist,
-              includePassableBlocks: false,
-              includeLiquidBlocks: false,
-            }) === undefined
-          )
-            result.push(entity);
-        }
+        result.push(entity);
       }
     });
   }
   return result;
+}
+
+export function getNearestPlayer(source, radius, checkForBlocks) {
+  const player = source.dimension.getEntities({
+    type: "minecraft:player",
+    location: source.location,
+    maxDistance: radius,
+    closest: 1,
+  })[0];
+
+  if (player && player.isValid()) {
+    if (!checkForBlocks) return player;
+    else {
+      const sPos = source.getHeadLocation();
+      const tPos = entity.location;
+      const dir = bVector3.subtract(sPos, tPos);
+
+      const dist = Math.round(bVector3.distance(sPos, tPos));
+
+      if (
+        dimension.getBlockFromRay(sPos, dir, {
+          maxDistance: dist,
+          includePassableBlocks: false,
+          includeLiquidBlocks: false,
+        }) === undefined
+      )
+        return player;
+    }
+    return undefined;
+  }
 }

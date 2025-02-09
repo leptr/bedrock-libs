@@ -1,4 +1,4 @@
-// Developed by: leptr
+// Developed by: Petar Mijailovic (leptr)
 // GitHub: https://github.com/leptr
 // Repo: https://github.com/leptr/bedrock-libs
 
