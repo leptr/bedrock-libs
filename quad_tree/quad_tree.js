@@ -2,16 +2,45 @@
 // GitHub: https://github.com/leptr
 // Repo: https://github.com/leptr/bedrock-libs
 
-class CubeArea {
-  constructor(x, y, z, w, h, d) {
+import * as mc from "@minecraft/server";
+
+class Area {
+  /**
+   *
+   * @param {Number} x
+   * @param {Number} y
+   * @param {Number} z
+   */
+  constructor(x, y, z) {
     this.x = x;
     this.y = y;
     this.z = z;
-    this.w = w;
-    this.h = h;
-    this.d = d;
+  }
+}
+
+class CubeArea extends Area {
+  /**
+   *
+   * @param {Number} x
+   * @param {Number} y
+   * @param {Number} z
+   * @param {Number} width
+   * @param {Number} height
+   * @param {Number} depth
+   */
+  constructor(x, y, z, width, height, depth) {
+    this.x = x;
+    this.y = y;
+    this.z = z;
+    this.w = width;
+    this.h = height;
+    this.d = depth;
   }
 
+  /**
+   *
+   * @param {mc.Vector3} element
+   */
   contains(element) {
     return (
       element.x >= this.x - this.w &&
@@ -23,6 +52,10 @@ class CubeArea {
     );
   }
 
+  /**
+   *
+   * @param {Area} range
+   */
   intersects(range) {
     return !(
       range.x - range.w > this.x + this.w ||
@@ -35,7 +68,7 @@ class CubeArea {
   }
 }
 
-class SphericalArea {
+class SphericalArea extends Area {
   constructor(x, y, z, r) {
     this.x = x;
     this.y = y;
@@ -44,11 +77,19 @@ class SphericalArea {
     this.rSquared = this.r * this.r;
   }
 
+  /**
+   *
+   * @param {mc.Vector3} point
+   */
   contains(point) {
     let d = Math.pow(point.x - this.x, 2) + Math.pow(point.y - this.y, 2) + Math.pow(point.z - this.z, 2);
     return d <= this.rSquared;
   }
 
+  /**
+   *
+   * @param {Area} range
+   */
   intersects(range) {
     let xDist = Math.abs(range.x - this.x);
     let yDist = Math.abs(range.y - this.y);
@@ -71,6 +112,11 @@ class SphericalArea {
 }
 
 class QuadTree {
+  /**
+   *
+   * @param {Area} boundary
+   * @param {Number} capacity
+   */
   constructor(boundary, capacity) {
     this.boundary = boundary;
     this.capacity = capacity;
@@ -78,6 +124,10 @@ class QuadTree {
     this.divided = false;
   }
 
+  /**
+   *
+   * @param {mc.Vector3} newElement
+   */
   insert(newElement) {
     if (!this.boundary.contains(newElement)) return false;
 
@@ -170,6 +220,11 @@ class QuadTree {
     this.divided = true;
   }
 
+  /**
+   *
+   * @param {Area} range
+   * @param {Array} results
+   */
   query(range, results) {
     if (!results) results = [];
     if (!this.boundary.intersects(range)) {

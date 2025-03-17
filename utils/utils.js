@@ -3,6 +3,12 @@
 // Repo: https://github.com/leptr/bedrock-libs
 
 // clamp function constrains the given number between the given min and max values
+/**
+ *
+ * @param {Number} num
+ * @param {Number} min
+ * @param {Number} max
+ */
 export function clamp(num, min, max) {
   if (num < min) return min;
   if (num > max) return max;
@@ -10,6 +16,12 @@ export function clamp(num, min, max) {
 }
 
 // lerp function stands for linear interpolation; it slowly brings the first value to the second over time with the given step size
+/**
+ *
+ * @param {Number} value1
+ * @param {Number} value2
+ * @param {Number} step
+ */
 export function lerp(value1, value2, step) {
   // Handle bad arguments
   if (value1 === undefined || value2 === undefined || step === undefined) error("Invalid arguments for lerp function");
@@ -19,11 +31,24 @@ export function lerp(value1, value2, step) {
 }
 
 // map function maps the given value ranging from a to b to a new value ranging from c to d
+/**
+ *
+ * @param {Number} num
+ * @param {Number} a
+ * @param {Number} b
+ * @param {Number} c
+ * @param {Number} d
+ */
 export function map(num, a, b, c, d) {
   return ((num - a) / (b - a)) * (d - c) + c;
 }
 
 // random function returns a random number or element from an array if provided with one
+/**
+ *
+ * @param {Number} num1
+ * @param {Number} num2
+ */
 export function random(num1, num2) {
   // Return a number between 0 and 1 if no arguments are provided
   if (num1 === undefined && num2 === undefined) return Math.random();
@@ -41,6 +66,11 @@ export function random(num1, num2) {
 }
 
 // randInt function returns a random integer between the given values
+/**
+ *
+ * @param {Number} num1
+ * @param {Number} num2
+ */
 export function randInt(num1, num2) {
   // Handle bad arguments
   if (num1 === undefined && num2 === undefined) error("At least one argument is needed for the randInt function");
@@ -51,46 +81,83 @@ export function randInt(num1, num2) {
 }
 
 // floor function rounds the provided number down to the next integer
+/**
+ *
+ * @param {Number} num
+ */
 export function floor(num) {
   return Math.floor(num);
 }
 
 // ceil function rounds the provided number up to the next integer
+/**
+ *
+ * @param {Number} num
+ */
 export function ceil(num) {
   return Math.ceil(num);
 }
 
 // round function rounds the provided number to the closest integer
+/**
+ *
+ * @param {Number} num
+ */
 export function round(num) {
   return Math.round(num);
 }
 
 // pow function returns the value of the provided number to the provided power
+/**
+ *
+ * @param {Number} num
+ * @param {Number} pow
+ */
 export function pow(num, pow) {
   return Math.pow(num, pow);
 }
 
 // sqrt function returns the square root of the provided number
+/**
+ *
+ * @param {Number} num
+ */
 export function sqrt(num) {
   return Math.sqrt(num);
 }
 
 // sqr function returns the square of the given number
+/**
+ *
+ * @param {Number} num
+ */
 export function sqr(num) {
   return num * num;
 }
 
 // abs function returns the absolute value of the provided number
+/**
+ *
+ * @param {Number} num
+ */
 export function abs(num) {
   return Math.abs(num);
 }
 
 // sin function returns the sine value of the provided angle
+/**
+ *
+ * @param {Number} angle
+ */
 export function sin(angle) {
   return Math.sin((angle * Math.PI) / 180);
 }
 
 // cos function returns the cosine value of the provided angle
+/**
+ *
+ * @param {Number} angle
+ */
 export function cos(angle) {
   return Math.cos((angle * Math.PI) / 180);
 }

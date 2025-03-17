@@ -4,11 +4,20 @@
 
 import * as mc from "@minecraft/server";
 
+/**
+ *
+ * @param {Number} num
+ */
 function sqr(num) {
   return num * num;
 }
 
 export class bVector2 {
+  /**
+   *
+   * @param {Number} x
+   * @param {Number} y
+   */
   constructor(x, y) {
     // Prepare basic vector variables
     this.x = 0;
@@ -19,6 +28,11 @@ export class bVector2 {
   }
 
   // set method allows the user to update the vector coordinates
+  /**
+   *
+   * @param {Number} x
+   * @param {Number} y
+   */
   set(x, y) {
     if (x === undefined || y === undefined) {
       // Handle bad arguments
@@ -31,6 +45,10 @@ export class bVector2 {
   }
 
   // add method allows the user to perform addition with the provided vector
+  /**
+   *
+   * @param {bVector2} vec2
+   */
   add(vec2) {
     if (vec2 === undefined) {
       // Handle bad arguments
@@ -43,6 +61,11 @@ export class bVector2 {
   }
 
   // add method allows the user to perform addition with the provided vector
+  /**
+   *
+   * @param {bVector2} vec1
+   * @param {bVector2} vec2
+   */
   static add(vec1, vec2) {
     if (vec1 === undefined || vec2 === undefined) {
       // Handle bad arguments
@@ -58,6 +81,10 @@ export class bVector2 {
   }
 
   // subtract method allows the user to perform subtraction with the provided vector
+  /**
+   *
+   * @param {bVector2} vec2
+   */
   subtract(vec2) {
     if (vec2 === undefined) {
       // Handle bad arguments
@@ -70,6 +97,11 @@ export class bVector2 {
   }
 
   // subtract method allows the user to perform subtraction with the provided vector
+  /**
+   *
+   * @param {bVector2} vec1
+   * @param {bVector2} vec2
+   */
   static subtract(vec1, vec2) {
     if (vec1 === undefined || vec2 === undefined) {
       // Handle bad arguments
@@ -85,6 +117,10 @@ export class bVector2 {
   }
 
   // multiply method allows the user to perform multiplication with the provided vector
+  /**
+   *
+   * @param {Number} num
+   */
   multiply(num) {
     if (num === undefined) num = 1;
     this.x *= num;
@@ -92,6 +128,11 @@ export class bVector2 {
   }
 
   // multiply method allows the user to perform multiplication with the provided vector
+  /**
+   *
+   * @param {bVector2} vec
+   * @param {Number} num
+   */
   static multiply(vec, num) {
     if (vec === undefined) {
       // Handle bad arguments
@@ -107,6 +148,10 @@ export class bVector2 {
   }
 
   // divide method allows the user to perform division with the provided vector
+  /**
+   *
+   * @param {Number} num
+   */
   divide(num) {
     if (num === undefined) num = 1;
     num = 1 / num;
@@ -114,6 +159,11 @@ export class bVector2 {
   }
 
   // multiply method allows the user to perform multiplication with the provided vector
+  /**
+   *
+   * @param {bVector2} vec
+   * @param {Number} num
+   */
   static divide(vec, num) {
     if (vec === undefined) {
       // Handle bad arguments
@@ -134,6 +184,10 @@ export class bVector2 {
   }
 
   // rotate method allows the user to rotate the vector by the given angle
+  /**
+   *
+   * @param {Number} angle
+   */
   rotate(angle) {
     let previousX = this.x;
     let previousY = this.y;
@@ -153,6 +207,10 @@ export class bVector2 {
   }
 
   // setMagnitude method allows the user to update the vector magnitude
+  /**
+   *
+   * @param {Number} newMag
+   */
   setMagnitude(newMag) {
     let mag = Math.sqrt(sqr(this.x) + sqr(this.y));
     let ratio = newMag / mag;
@@ -162,6 +220,11 @@ export class bVector2 {
   }
 
   // limit method allows the user to set the maximum magnitude for the vector
+  /**
+   *
+   * @param {Number} minMag
+   * @param {Number} maxMag
+   */
   limit(minMag, maxMag) {
     let maxM = minMag;
     let minM = null;
@@ -197,6 +260,10 @@ export class bVector2 {
   }
 
   // distance method allows the user to get the distance to another vector
+  /**
+   *
+   * @param {bVector2} vec2
+   */
   distance(vec2) {
     // Handle bad arguments
     if (vec2 === undefined) console.error("You need to pass another bVector2 instance to the bVector2 distance method");
@@ -204,6 +271,11 @@ export class bVector2 {
   }
 
   // distance method allows the user to get the distance to another vector
+  /**
+   *
+   * @param {bVector2} vec1
+   * @param {bVector2} vec2
+   */
   static distance(vec1, vec2) {
     // Handle bad arguments
     if (vec2 === undefined) console.error("bVector2 distance method expects two instances of bVector2");
@@ -211,6 +283,11 @@ export class bVector2 {
   }
 
   // lerp method allows the user to lerp the vector towards another vector over time
+  /**
+   *
+   * @param {bVector2} vec2
+   * @param {Number} step
+   */
   lerp(vec2, step) {
     // Handle bad arguments
     if (vec2 === undefined || step === undefined) console.error("Invalid arguments for the bVector2 lerp method");
@@ -221,6 +298,12 @@ export class bVector2 {
   }
 
   // lerp method allows the user to lerp the vector towards another vector over time
+  /**
+   *
+   * @param {bVector2} vec1
+   * @param {bVector2} vec2
+   * @param {Number} step
+   */
   static lerp(vec1, vec2, step) {
     // Handle bad arguments
     if (vec1 === undefined || vec2 === undefined || step === undefined) {
@@ -235,6 +318,13 @@ export class bVector2 {
   }
 
   // clamp method allows the user to constrain the method between the set coordinates
+  /**
+   *
+   * @param {Number} minX
+   * @param {Number} maxX
+   * @param {Number} maxY
+   * @param {Number} maxY
+   */
   clamp(minX, maxX, minY, maxY) {
     if (this.x >= maxX) this.x = maxX;
     else if (this.x <= minX) this.x = minX;
@@ -243,16 +333,29 @@ export class bVector2 {
   }
 
   // fromVector2 method returns a bVector2 from a Vector2
+  /**
+   *
+   * @param {mc.Vector2} vec2
+   */
   static fromVector2(vec2) {
     return new bVector2(vec2.x, vec2.y);
   }
 
-  // fromAngle method returns a bVector3 from the provided angle
+  // toVector2 method returns a Vector2 from the bVector2
+  toVector2() {
+    return { x: this.x, y: this.y };
+  }
+
+  // fromAngle method returns a bVector2 from the provided angle
+  /**
+   *
+   * @param {Number} angle
+   */
   static fromAngle(angle) {
     return new bVector2(cos(angle), sin(angle));
   }
 
-  // Generate a random bVector3
+  // Generate a random bVector2
   static random() {
     let x = Math.random();
     let z = Math.random();
@@ -260,16 +363,39 @@ export class bVector2 {
   }
 
   // angleOffset method returns the difference in angles between this vector and the provided vector
+  /**
+   *
+   * @param {bVector2} vec2
+   */
   angleOffset(vec2) {
     return (Math.atan2(vec2.y * this.x - vec2.x * this.y, vec2.x * this.x + vec2.y * this.y) * 180) / Math.PI;
   }
 
+  // angleOffset method returns the difference in angles between this vector and the provided vector
+  /**
+   *
+   * @param {bVector2} vec1
+   * @param {bVector2} vec2
+   */
+  static angleOffset(vec1, vec2) {
+    return (Math.atan2(vec2.y * vec1.x - vec2.x * vec1.y, vec2.x * vec1.x + vec2.y * vec1.y) * 180) / Math.PI;
+  }
+
   // crossProduct method returns the cross product of this vector and the provided vector
+  /**
+   *
+   * @param {bVector2} vec2
+   */
   crossProduct(vec2) {
     return this.x * vec2.y - vec2.x * this.y;
   }
 
   // crossProduct method returns the cross product of this vector and the provided vector
+  /**
+   *
+   * @param {bVector2} vec1
+   * @param {bVector2} vec2
+   */
   static crossProduct(vec1, vec2) {
     if (vec1 === undefined || vec2 === undefined) {
       console.error("No valid arguments provided to the bVector2 crossProduct method");
@@ -279,11 +405,20 @@ export class bVector2 {
   }
 
   // dotProduct method returns the dot product of two vectors
+  /**
+   *
+   * @param {bVector2} vec2
+   */
   dotProduct(vec2) {
     return this.x * vec2.x + this.y * vec2.y;
   }
 
   // dotProduct method returns the dot product of two vectors
+  /**
+   *
+   * @param {bVector2} vec1
+   * @param {bVector2} vec2
+   */
   static dotProduct(vec1, vec2) {
     if (vec1 === undefined || vec2 === undefined) {
       console.error("No valid arguments provided to the bVector2 dotProduct method");
@@ -294,6 +429,12 @@ export class bVector2 {
 }
 
 export class bVector3 {
+  /**
+   *
+   * @param {number} x
+   * @param {number} y
+   * @param {number} z
+   */
   constructor(x, y, z) {
     // Prepare basic vector variables
     this.x = 0;
@@ -306,6 +447,12 @@ export class bVector3 {
   }
 
   // set method allows the user to update the vector coordinates
+  /**
+   *
+   * @param {number} x
+   * @param {number} y
+   * @param {number} z
+   */
   set(x, y, z) {
     if (x === undefined || y === undefined || z === undefined) {
       // Handle bad arguments
@@ -319,6 +466,10 @@ export class bVector3 {
   }
 
   // add method allows the user to perform addition with the provided vector
+  /**
+   *
+   * @param {bVector3} vec2
+   */
   add(vec2) {
     if (vec2 === undefined) {
       // Handle bad arguments
@@ -332,6 +483,11 @@ export class bVector3 {
   }
 
   // add method allows the user to perform addition with the provided vector
+  /**
+   *
+   * @param {bVector3} vec1
+   * @param {bVector3} vec2
+   */
   static add(vec1, vec2) {
     if (vec1 === undefined || vec2 === undefined) {
       // Handle bad arguments
@@ -348,6 +504,10 @@ export class bVector3 {
   }
 
   // subtract method allows the user to perform subtraction with the provided vector
+  /**
+   *
+   * @param {bVector3} vec2
+   */
   subtract(vec2) {
     if (vec2 === undefined) {
       // Handle bad arguments
@@ -361,6 +521,11 @@ export class bVector3 {
   }
 
   // subtract method allows the user to perform subtraction with the provided vector
+  /**
+   *
+   * @param {bVector3} vec1
+   * @param {bVector3} vec2
+   */
   static subtract(vec1, vec2) {
     if (vec1 === undefined || vec2 === undefined) {
       // Handle bad arguments
@@ -377,6 +542,10 @@ export class bVector3 {
   }
 
   // multiply method allows the user to perform multiplication with the provided vector
+  /**
+   *
+   * @param {Number} num
+   */
   multiply(num) {
     if (num === undefined) num = 1;
     this.x *= num;
@@ -385,6 +554,11 @@ export class bVector3 {
   }
 
   // multiply method allows the user to perform multiplication with the provided vector
+  /**
+   *
+   * @param {bVector3} vec
+   * @param {Number} num
+   */
   static multiply(vec, num) {
     if (vec === undefined) {
       // Handle bad arguments
@@ -401,6 +575,10 @@ export class bVector3 {
   }
 
   // divide method allows the user to perform division with the provided vector
+  /**
+   *
+   * @param {Number} num
+   */
   divide(num) {
     if (num === undefined) num = 1;
     num = 1 / num;
@@ -408,6 +586,11 @@ export class bVector3 {
   }
 
   // multiply method allows the user to perform multiplication with the provided vector
+  /**
+   *
+   * @param {bVector3} vec
+   * @param {Number} num
+   */
   static divide(vec, num) {
     if (vec === undefined) {
       // Handle bad arguments
@@ -424,19 +607,17 @@ export class bVector3 {
   }
 
   // angle method allows the user to get the angle of the vector
-  angles(degrees) {
-    if (degrees != undefined) {
-      let theta = (Math.atan2(this.x, this.z) * -180) / Math.PI;
-      let phi = (Math.atan(this.y / Math.sqrt(sqr(this.x) + sqr(this.z))) * 180) / Math.PI;
-      return { theta, phi };
-    }
-
-    let theta = Math.atan(this.z / this.x);
-    let phi = Math.atan(this.y / Math.sqrt(sqr(this.x) + sqr(this.z)));
+  angles() {
+    let theta = (Math.atan2(this.x, this.z) * -180) / Math.PI;
+    let phi = (Math.atan(this.y / Math.sqrt(sqr(this.x) + sqr(this.z))) * 180) / Math.PI;
     return { theta, phi };
   }
 
   // rotateX method allows the user to rotate the vector on the X axis by the given angle
+  /**
+   *
+   * @param {Number} angle
+   */
   rotateX(angle) {
     let previousX = this.x;
     let previousY = this.y;
@@ -447,6 +628,10 @@ export class bVector3 {
   }
 
   // rotateY method allows the user to rotate the vector on the X axis by the given angle
+  /**
+   *
+   * @param {Number} angle
+   */
   rotateY(angle) {
     let previousX = this.x;
     let previousY = this.y;
@@ -457,6 +642,10 @@ export class bVector3 {
   }
 
   // rotateZ method allows the user to rotate the vector on the X axis by the given angle
+  /**
+   *
+   * @param {Number} angle
+   */
   rotateZ(angle) {
     let previousX = this.x;
     let previousY = this.y;
@@ -477,6 +666,10 @@ export class bVector3 {
   }
 
   // setMagnitude method allows the user to update the vector magnitude
+  /**
+   *
+   * @param {Number} newMag
+   */
   setMagnitude(newMag) {
     let mag = Math.sqrt(sqr(this.x) + sqr(this.y) + sqr(this.z));
     let ratio = newMag / mag;
@@ -487,6 +680,11 @@ export class bVector3 {
   }
 
   // limit method allows the user to set the maximum magnitude for the vector
+  /**
+   *
+   * @param {Number} minMag
+   * @param {Number} maxMag
+   */
   limit(minMag, maxMag) {
     let maxM = minMag;
     let minM = null;
@@ -515,6 +713,10 @@ export class bVector3 {
   }
 
   // distance method allows the user to get the distance to another vector
+  /**
+   *
+   * @param {bVector3} vec2
+   */
   distance(vec2) {
     // Handle bad arguments
     if (vec2 === undefined) console.error("You need to pass another bVector3 instance to the bVector3 distance method");
@@ -522,6 +724,11 @@ export class bVector3 {
   }
 
   // distance method allows the user to get the distance to another vector
+  /**
+   *
+   * @param {bVector3} vec1
+   * @param {bVector3} vec2
+   */
   static distance(vec1, vec2) {
     // Handle bad arguments
     if (vec1 === undefined) console.error("bVector3 distance method expects two instances of bVector2");
@@ -529,6 +736,11 @@ export class bVector3 {
   }
 
   // lerp method allows the user to lerp the vector towards another vector over time
+  /**
+   *
+   * @param {bVector3} vec2
+   * @param {Number} step
+   */
   lerp(vec2, step) {
     // Handle bad arguments
     if (vec2 === undefined || step === undefined) {
@@ -542,6 +754,12 @@ export class bVector3 {
   }
 
   // lerp method allows the user to lerp the vector towards another vector over time
+  /**
+   *
+   * @param {bVector3} vec1
+   * @param {bVector3} vec2
+   * @param {Number} step
+   */
   static lerp(vec1, vec2, step) {
     // Handle bad arguments
     if (vec1 === undefined || vec2 === undefined || step === undefined) {
@@ -557,6 +775,15 @@ export class bVector3 {
   }
 
   // clamp method allows the user to constrain the method between the set coordinates
+  /**
+   *
+   * @param {Number} minX
+   * @param {Number} maxX
+   * @param {Number} minY
+   * @param {Number} maxY
+   * @param {Number} minZ
+   * @param {Number} maxZ
+   */
   clamp(minX, maxX, minY, maxY, minZ, maxZ) {
     if (this.x >= maxX) this.x = maxX;
     else if (this.x <= minX) this.x = minX;
@@ -567,6 +794,10 @@ export class bVector3 {
   }
 
   // fromVector3 method returns a bVector3 from the provided Vector3
+  /**
+   *
+   * @param {bVector3} vec2
+   */
   static fromVector3(vec2) {
     return new bVector3(vec2.x, vec2.y, vec2.z);
   }
@@ -577,10 +808,15 @@ export class bVector3 {
   }
 
   // fromAngles method returns a bVector3 from 2 provided angles
-  static fromAngles(alpha, beta) {
-    let x = Math.cos(alpha) * Math.cos(beta);
-    let z = Math.sin(alpha) * Math.cos(beta);
-    let y = Math.sin(beta);
+  /**
+   *
+   * @param {Number} theta
+   * @param {Number} phi
+   */
+  static fromAngles(theta, phi) {
+    let x = Math.cos(theta) * Math.cos(phi);
+    let z = Math.sin(theta) * Math.cos(phi);
+    let y = Math.sin(phi);
     return new bVector3(x, y, z);
   }
 
@@ -593,13 +829,33 @@ export class bVector3 {
   }
 
   // angleOffset method returns the difference in angles between this vector and the provided vector
+  /**
+   *
+   * @param {bVector3} vec2
+   */
   angleOffset(vec2) {
     let off1 = (Math.atan2(vec2.y * this.x - vec2.x * this.y, vec2.x * this.x + vec2.y * this.y) * 180) / Math.PI;
     let off2 = (Math.atan2(vec2.z * this.x - vec2.x * this.z, vec2.x * this.x + vec2.z * this.z) * 180) / Math.PI;
     return [off1, off2];
   }
 
+  // angleOffset method returns the difference in angles between this vector and the provided vector
+  /**
+   *
+   * @param {bVector3} vec1
+   * @param {bVector3} vec2
+   */
+  static angleOffset(vec1, vec2) {
+    let off1 = (Math.atan2(vec2.y * vec1.x - vec2.x * vec1.y, vec2.x * vec1.x + vec2.y * vec1.y) * 180) / Math.PI;
+    let off2 = (Math.atan2(vec2.z * vec1.x - vec2.x * vec1.z, vec2.x * vec1.x + vec2.z * vec1.z) * 180) / Math.PI;
+    return [off1, off2];
+  }
+
   // crossProduct method returns the cross product of two vectors
+  /**
+   *
+   * @param {bVector3} vec2
+   */
   crossProduct(vec2) {
     let x = this.y * vec2.z - this.z * vec2.y;
     let y = this.z * vec2.x - this.x * vec2.z;
@@ -608,6 +864,11 @@ export class bVector3 {
   }
 
   // crossProduct method returns the cross product of two vectors
+  /**
+   *
+   * @param {bVector3} vec1
+   * @param {bVector3} vec2
+   */
   static crossProduct(vec1, vec2) {
     if (vec1 === undefined || vec2 === undefined) {
       console.error("No valid argument provided to the bVector3 crossProduct method");
@@ -620,11 +881,20 @@ export class bVector3 {
   }
 
   // dotProduct method returns the dot product of two vectors
+  /**
+   *
+   * @param {bVector3} vec2
+   */
   dotProduct(vec2) {
     return this.x * vec2.x + this.y * vec2.y + this.z * vec2.z;
   }
 
   // dotProduct method returns the dot product of two vectors
+  /**
+   *
+   * @param {bVector3} vec1
+   * @param {bVector3} vec2
+   */
   static dotProduct(vec1, vec2) {
     if (vec1 === undefined || vec2 === undefined) {
       console.error("No valid argument provided to the bVector3 dotProduct method");

@@ -3,6 +3,11 @@
 // Repo: https://github.com/leptr/bedrock-libs
 
 export class Matrix {
+  /**
+   *
+   * @param {Number} rows
+   * @param {Number} cols
+   */
   constructor(rows, cols) {
     this.rows = rows;
     this.cols = cols;
@@ -19,10 +24,19 @@ export class Matrix {
     return m;
   }
 
+  /**
+   *
+   * @param {Array} arr
+   */
   static fromArray(arr) {
     return new Matrix(arr.length, 1).map((e, i) => arr[i]);
   }
 
+  /**
+   *
+   * @param {Matrix} a
+   * @param {Matrix} b
+   */
   static subtract(a, b) {
     if (a.rows !== b.rows || a.cols !== b.cols) {
       console.log("Columns and Rows of A must match Columns and Rows of B.");
@@ -42,6 +56,10 @@ export class Matrix {
     return arr;
   }
 
+  /**
+   *
+   * @param {Number} n
+   */
   getRow(n) {
     let arr = [];
     for (let j = 0; j < this.cols; j++) {
@@ -50,6 +68,10 @@ export class Matrix {
     return arr;
   }
 
+  /**
+   *
+   * @param {Number} n
+   */
   getColumn(n) {
     let arr = [];
     for (let i = 0; i < this.rows; i++) {
@@ -58,66 +80,121 @@ export class Matrix {
     return arr;
   }
 
+  /**
+   *
+   * @param {Number} n
+   * @param {Array} arr
+   */
   setRow(n, arr) {
     for (let j = 0; j < this.cols; j++) {
       this[n][j] = arr[j];
     }
   }
 
+  /**
+   *
+   * @param {Number} n
+   * @param {Array} arr
+   */
   setColumn(n, arr) {
     for (let i = 0; i < this.rows; i++) {
       this[i][n] = arr[i];
     }
   }
 
+  /**
+   *
+   * @param {Number} n
+   * @param {Number} num
+   */
   addRow(n, num) {
     for (let j = 0; j < this.cols; j++) {
       this[n][j] += num;
     }
   }
 
+  /**
+   *
+   * @param {Number} n
+   * @param {Number} num
+   */
   addColumn(n, num) {
     for (let i = 0; i < this.rows; i++) {
       this[i][n] += num;
     }
   }
 
+  /**
+   *
+   * @param {Number} n
+   * @param {Number} num
+   */
   subtractRow(n, num) {
     for (let j = 0; j < this.cols; j++) {
       this[n][j] -= num;
     }
   }
 
+  /**
+   *
+   * @param {Number} n
+   * @param {Number} num
+   */
   subtractColumn(n, num) {
     for (let i = 0; i < this.rows; i++) {
       this[i][n] -= num;
     }
   }
 
+  /**
+   *
+   * @param {Number} n
+   * @param {Number} num
+   */
   multiplyRow(n, num) {
     for (let j = 0; j < this.cols; j++) {
       this[n][j] *= num;
     }
   }
 
+  /**
+   *
+   * @param {Number} n
+   * @param {Number} num
+   */
   multiplyColumn(n, num) {
     for (let i = 0; i < this.rows; i++) {
       this[i][n] *= num;
     }
   }
 
+  /**
+   *
+   * @param {Number} n
+   * @param {Number} num
+   */
   divideRow(n, num) {
     for (let j = 0; j < this.cols; j++) {
       this[n][j] /= num;
     }
   }
 
+  /**
+   *
+   * @param {Number} n
+   * @param {Number} num
+   */
   divideColumn(n, num) {
     for (let i = 0; i < this.rows; i++) {
       this[i][n] /= num;
     }
   }
 
+  /**
+   *
+   * @param {Number} r1
+   * @param {Number} r2
+   */
   swapRows(r1, r2) {
     let temp1 = [];
     let temp2 = [];
@@ -131,6 +208,11 @@ export class Matrix {
     }
   }
 
+  /**
+   *
+   * @param {Number} c1
+   * @param {Number} c2
+   */
   swapColumns(c1, c2) {
     let temp1 = [];
     let temp2 = [];
@@ -148,6 +230,10 @@ export class Matrix {
     return this.map((e) => Math.random() * 2 - 1);
   }
 
+  /**
+   *
+   * @param {Number} n
+   */
   add(n) {
     if (n instanceof Matrix) {
       if (this.rows !== n.rows || this.cols !== n.cols) {
@@ -160,10 +246,19 @@ export class Matrix {
     }
   }
 
+  /**
+   *
+   * @param {Matrix} matrix
+   */
   static transpose(matrix) {
     return new Matrix(matrix.cols, matrix.rows).map((_, i, j) => matrix[j][i]);
   }
 
+  /**
+   *
+   * @param {Matrix} a
+   * @param {Matrix} b
+   */
   static multiply(a, b) {
     // Matrix product
     if (a.cols !== b.rows) {
@@ -181,6 +276,10 @@ export class Matrix {
     });
   }
 
+  /**
+   *
+   * @param {Number} n
+   */
   multiply(n) {
     if (n instanceof Matrix) {
       if (this.rows !== n.rows || this.cols !== n.cols) {
@@ -196,6 +295,10 @@ export class Matrix {
     }
   }
 
+  /**
+   *
+   * @param {function} func
+   */
   map(func) {
     // Apply a function to every element of matrix
     for (let i = 0; i < this.rows; i++) {
@@ -207,6 +310,11 @@ export class Matrix {
     return this;
   }
 
+  /**
+   *
+   * @param {Matrix} matrix
+   * @param {function} func
+   */
   static map(matrix, func) {
     // Apply a function to every element of matrix
     return new Matrix(matrix.rows, matrix.cols).map((e, i, j) => func(matrix[i][j], i, j));
@@ -216,6 +324,10 @@ export class Matrix {
     return JSON.stringify(this);
   }
 
+  /**
+   *
+   * @param {String} data
+   */
   static deserialize(data) {
     if (typeof data == "string") {
       data = JSON.parse(data);
@@ -273,6 +385,10 @@ export class Matrix {
     return index;
   }
 
+  /**
+   *
+   * @param {Number} n
+   */
   maxRow(n) {
     let max = -Infinity;
     for (let j = 0; j < this.cols; j++) {
@@ -281,6 +397,10 @@ export class Matrix {
     return max;
   }
 
+  /**
+   *
+   * @param {Number} n
+   */
   minRow(n) {
     let min = Infinity;
     for (let j = 0; j < this.cols; j++) {
@@ -289,6 +409,10 @@ export class Matrix {
     return min;
   }
 
+  /**
+   *
+   * @param {Number} n
+   */
   maxRowIndex(n) {
     let max = -Infinity;
     let index = 0;
@@ -301,6 +425,10 @@ export class Matrix {
     return index;
   }
 
+  /**
+   *
+   * @param {Number} n
+   */
   minRowIndex(n) {
     let min = Infinity;
     let index = 0;
@@ -313,6 +441,10 @@ export class Matrix {
     return index;
   }
 
+  /**
+   *
+   * @param {Number} n
+   */
   maxColumn(n) {
     let max = -Infinity;
     for (let i = 0; i < this.rows; i++) {
@@ -321,6 +453,10 @@ export class Matrix {
     return max;
   }
 
+  /**
+   *
+   * @param {Number} n
+   */
   minColumn(n) {
     let min = Infinity;
     for (let i = 0; i < this.rows; i++) {
@@ -329,6 +465,10 @@ export class Matrix {
     return min;
   }
 
+  /**
+   *
+   * @param {Number} n
+   */
   maxColumnIndex(n) {
     let max = -Infinity;
     let index = 0;
@@ -341,6 +481,10 @@ export class Matrix {
     return index;
   }
 
+  /**
+   *
+   * @param {Number} n
+   */
   minColumnIndex(n) {
     let min = Infinity;
     let index = 0;
