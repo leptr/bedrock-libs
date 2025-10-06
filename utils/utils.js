@@ -2,6 +2,15 @@
 // GitHub: https://github.com/leptr
 // Repo: https://github.com/leptr/bedrock-libs
 
+// secondsToTicks function takes an amount of seconds as a parameter and returns the corresponding amount of game ticks
+/**
+ *
+ * @param {Number} time
+ */
+export function secondsToTicks(time) {
+  return Math.round(time * 20);
+}
+
 // clamp function constrains the given number between the given min and max values
 /**
  *
@@ -10,8 +19,12 @@
  * @param {Number} max
  */
 export function clamp(num, min, max) {
-  if (num < min) return min;
-  if (num > max) return max;
+  if (num < min) {
+    return min;
+  }
+  if (num > max) {
+    return max;
+  }
   return num;
 }
 
@@ -24,8 +37,9 @@ export function clamp(num, min, max) {
  */
 export function lerp(value1, value2, step) {
   // Handle bad arguments
-  if (value1 === undefined || value2 === undefined || step === undefined) error("Invalid arguments for lerp function");
-  else {
+  if (value1 === undefined || value2 === undefined || step === undefined) {
+    error("Invalid arguments for lerp function");
+  } else {
     return (1 - step) * value1 + step * value2;
   }
 }
@@ -51,17 +65,22 @@ export function map(num, a, b, c, d) {
  */
 export function random(num1, num2) {
   // Return a number between 0 and 1 if no arguments are provided
-  if (num1 === undefined && num2 === undefined) return Math.random();
-  else {
+  if (num1 === undefined && num2 === undefined) {
+    return Math.random();
+  } else {
     // Return a random array element if one is provided
     if (num1.constructor === Array) {
-      let i = Math.floor(Math.random() * num1.length);
+      const i = Math.floor(Math.random() * num1.length);
       return num1[i];
     }
     // Return a random number between the two provided numbers if two numbers are provided
-    if (num2 !== undefined) return Math.random() * (num2 - num1) + num1;
+    if (num2 !== undefined) {
+      return Math.random() * (num2 - num1) + num1;
+    }
     // Return a random number between 0 and the provided number if only one is provided
-    else return Math.random() * num1;
+    else {
+      return Math.random() * num1;
+    }
   }
 }
 
@@ -73,11 +92,17 @@ export function random(num1, num2) {
  */
 export function randInt(num1, num2) {
   // Handle bad arguments
-  if (num1 === undefined && num2 === undefined) error("At least one argument is needed for the randInt function");
+  if (num1 === undefined && num2 === undefined) {
+    error("At least one argument is needed for the randInt function");
+  }
   // Return a random integer between the two numbers if two numbers are provided
-  else if (num2 !== undefined) return Math.floor(Math.random() * (num2 - num1) + num1);
+  else if (num2 !== undefined) {
+    return Math.floor(Math.random() * (num2 - num1) + num1);
+  }
   // Return a random interger between 0 and the provided number if only one number is provided
-  else return Math.floor(Math.random() * num1);
+  else {
+    return Math.floor(Math.random() * num1);
+  }
 }
 
 // floor function rounds the provided number down to the next integer
