@@ -2,252 +2,148 @@
 // GitHub: https://github.com/leptr
 // Repo: https://github.com/leptr/bedrock-libs
 
-// secondsToTicks function takes an amount of seconds as a parameter and returns the corresponding amount of game ticks
-/**
- *
- * @param {Number} time
- */
+import { TicksPerSecond } from "@minecraft/server";
+import { logger } from "./logger.js";
+import { HALF_CIRCLE } from "../better_vectors/better_vectors.js";
+
+/** Convert seconds to Minecraft ticks, rounded to a whole tick. */
 export function secondsToTicks(time) {
-  return Math.round(time * 20);
+  return Math.round(time * TicksPerSecond);
 }
 
-// clamp function constrains the given number between the given min and max values
-/**
- *
- * @param {Number} num
- * @param {Number} min
- * @param {Number} max
- */
-export function clamp(num, min, max) {
-  if (num < min) {
-    return min;
-  }
-  if (num > max) {
-    return max;
-  }
-  return num;
+/** Convert Minecraft ticks to seconds. The result is not rounded. */
+export function ticksToSeconds(time) {
+  return time / TicksPerSecond;
 }
 
-// lerp function stands for linear interpolation; it slowly brings the first value to the second over time with the given step size
+/** Clamp a number to the inclusive range `[minimum, maximum]`. */
+export function clamp(value, minimum, maximum) {
+  if (value < minimum) {
+    return minimum;
+  }
+  if (value > maximum) {
+    return maximum;
+  }
+  return value;
+}
+
 /**
- *
- * @param {Number} value1
- * @param {Number} value2
- * @param {Number} step
+ * Linearly interpolate between two numeric values.
+ * Throws a TypeError when an argument is missing.
  */
 export function lerp(value1, value2, step) {
-  // Handle bad arguments
   if (value1 === undefined || value2 === undefined || step === undefined) {
-    error("Invalid arguments for lerp function");
-  } else {
-    return (1 - step) * value1 + step * value2;
+    throw new TypeError("Invalid arguments for lerp function");
   }
+  return (1 - step) * value1 + step * value2;
 }
 
-// map function maps the given value ranging from a to b to a new value ranging from c to d
 /**
- *
- * @param {Number} num
- * @param {Number} a
- * @param {Number} b
- * @param {Number} c
- * @param {Number} d
+ * Remap a value from the range `[a, b]` into the range `[c, d]`.
+ * The value is not clamped: one outside `[a, b]` lands outside `[c, d]`.
  */
-export function map(num, a, b, c, d) {
-  return ((num - a) / (b - a)) * (d - c) + c;
+export function remap(value, a, b, c, d) {
+  return ((value - a) / (b - a)) * (d - c) + c;
 }
 
-// random function returns a random number or element from an array if provided with one
 /**
- *
- * @param {Number} num1
- * @param {Number} num2
+ * Return a random float or a random array element.
+ * With no arguments, returns a float in `[0, 1)`.
  */
-export function random(num1, num2) {
-  // Return a number between 0 and 1 if no arguments are provided
-  if (num1 === undefined && num2 === undefined) {
+export function random(number1, number2) {
+  if (number1 === undefined && number2 === undefined) {
     return Math.random();
-  } else {
-    // Return a random array element if one is provided
-    if (num1.constructor === Array) {
-      const i = Math.floor(Math.random() * num1.length);
-      return num1[i];
+  }
+  if (number1.constructor === Array) {
+    const index = Math.floor(Math.random() * number1.length);
+    return number1[index];
+  }
+  if (number2 !== undefined) {
+    return Math.random() * (number2 - number1) + number1;
+  }
+
+  return Math.random() * number1;
+}
+
+/**
+ * Return a random integer, every value in the range being equally likely.
+ * `randInt(max)` covers 0 to max, `randInt(min, max)` covers min to max;
+ * both ends are included. Throws a TypeError when called with no arguments.
+ */
+export function randInt(number1, number2) {
+  if (number1 === undefined && number2 === undefined) {
+    throw new TypeError(
+      "At least one argument is needed for the randInt function",
+    );
+  }
+  const first = number2 === undefined ? 0 : number1;
+  const second = number2 === undefined ? number1 : number2;
+  const low = Math.ceil(Math.min(first, second));
+  const high = Math.floor(Math.max(first, second));
+  return Math.floor(Math.random() * (high - low + 1)) + low;
+}
+
+/**
+ * Sample a triangular distribution, the port of vanilla `RandomSource.triangle`.
+ * Subtracting two independent draws biases the result toward `mean` instead of
+ * spreading it evenly, which is how vanilla scatters projectiles.
+ */
+export function triangle(mean, deviation, randomSource = Math.random) {
+  // Named rather than inlined so the subtraction is not two identical
+  // expressions (sonar javascript:S1764).
+  const positive = randomSource();
+  const negative = randomSource();
+  return mean + deviation * (positive - negative);
+}
+
+/** Return the square of a number. */
+export function sqr(value) {
+  return value * value;
+}
+
+/** Convert an angle from degrees to radians. */
+export function degreesToRadians(angle) {
+  return (angle * Math.PI) / HALF_CIRCLE;
+}
+
+/** Convert an angle from radians to degrees. */
+export function radiansToDegrees(angle) {
+  return (angle * HALF_CIRCLE) / Math.PI;
+}
+
+/** Return the sine of an angle expressed in degrees. */
+export function sinDegrees(angle) {
+  return Math.sin(degreesToRadians(angle));
+}
+
+/** Return the cosine of an angle expressed in degrees. */
+export function cosDegrees(angle) {
+  return Math.cos(degreesToRadians(angle));
+}
+
+/** Log values through the shared logger. */
+export function print(...messages) {
+  logger.debug(...messages);
+}
+
+/**
+ * Log tabular data. Bedrock's console has no `table` method, so each row is
+ * written as JSON instead. A row that cannot be turned into JSON, such as a
+ * circular structure, falls back to `String()`, so this never throws.
+ */
+export function table(...rows) {
+  for (const row of rows) {
+    let text;
+    try {
+      text = JSON.stringify(row);
+    } catch {
+      text = String(row);
     }
-    // Return a random number between the two provided numbers if two numbers are provided
-    if (num2 !== undefined) {
-      return Math.random() * (num2 - num1) + num1;
-    }
-    // Return a random number between 0 and the provided number if only one is provided
-    else {
-      return Math.random() * num1;
-    }
+    logger.info(text);
   }
 }
 
-// randInt function returns a random integer between the given values
-/**
- *
- * @param {Number} num1
- * @param {Number} num2
- */
-export function randInt(num1, num2) {
-  // Handle bad arguments
-  if (num1 === undefined && num2 === undefined) {
-    error("At least one argument is needed for the randInt function");
-  }
-  // Return a random integer between the two numbers if two numbers are provided
-  else if (num2 !== undefined) {
-    return Math.floor(Math.random() * (num2 - num1) + num1);
-  }
-  // Return a random interger between 0 and the provided number if only one number is provided
-  else {
-    return Math.floor(Math.random() * num1);
-  }
-}
-
-// floor function rounds the provided number down to the next integer
-/**
- *
- * @param {Number} num
- */
-export function floor(num) {
-  return Math.floor(num);
-}
-
-// ceil function rounds the provided number up to the next integer
-/**
- *
- * @param {Number} num
- */
-export function ceil(num) {
-  return Math.ceil(num);
-}
-
-// round function rounds the provided number to the closest integer
-/**
- *
- * @param {Number} num
- */
-export function round(num) {
-  return Math.round(num);
-}
-
-// pow function returns the value of the provided number to the provided power
-/**
- *
- * @param {Number} num
- * @param {Number} pow
- */
-export function pow(num, pow) {
-  return Math.pow(num, pow);
-}
-
-// sqrt function returns the square root of the provided number
-/**
- *
- * @param {Number} num
- */
-export function sqrt(num) {
-  return Math.sqrt(num);
-}
-
-// sqr function returns the square of the given number
-/**
- *
- * @param {Number} num
- */
-export function sqr(num) {
-  return num * num;
-}
-
-// abs function returns the absolute value of the provided number
-/**
- *
- * @param {Number} num
- */
-export function abs(num) {
-  return Math.abs(num);
-}
-
-// sin function returns the sine value of the provided angle
-/**
- *
- * @param {Number} angle
- */
-export function sin(angle) {
-  return Math.sin((angle * Math.PI) / 180);
-}
-
-// cos function returns the cosine value of the provided angle
-/**
- *
- * @param {Number} angle
- */
-export function cos(angle) {
-  return Math.cos((angle * Math.PI) / 180);
-}
-
-// acos function returns the arc cosine value of the provided angle
-export function acos() {
-  return Math.acos.apply(null, arguments);
-}
-
-// asin function returns the arc sine value of the provided angle
-export function asin() {
-  return Math.asin.apply(null, arguments);
-}
-
-// tan function returns the tangent of the given number in radians
-export function tan() {
-  return Math.tan.apply(null, arguments);
-}
-
-// atan function returns the arc tangent of the given number in radians
-export function atan() {
-  return Math.atan.apply(null, arguments);
-}
-
-// atan2 function returns the angle in the plane (in radians) between the positive x-axis and the ray from (0, 0) to the point
-export function atan2() {
-  return Math.atan2.apply(null, arguments);
-}
-
-// exp function returns e raised to the power of the provided number
-export function exp() {
-  return Math.exp.apply(null, arguments);
-}
-
-// log function returns the natural logarithm base e of the given number
-export function log() {
-  return Math.log.apply(null, arguments);
-}
-
-// min function returns the smallest number in the provided list of numbers
-export function min() {
-  return Math.min.apply(null, arguments);
-}
-
-// max function returns the biggest number in the provided list of numbers
-export function max() {
-  return Math.max.apply(null, arguments);
-}
-
-// write function writes a line of text to the DOM
-export function write() {
-  document.write.apply(null, arguments);
-}
-
-// print function writes the text to the console
-export function print() {
-  console.log.apply(null, arguments);
-}
-
-// table function prints an array or matrix as a table to the console
-export function table() {
-  console.table.apply(null, arguments);
-}
-
-// error function writes an error to the console
-export function error() {
-  console.error.apply(null, arguments);
+/** Log errors through the shared logger. */
+export function error(...messages) {
+  logger.error(...messages);
 }

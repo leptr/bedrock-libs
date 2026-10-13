@@ -1,0 +1,19 @@
+{
+  "name": "bedrock-libs",
+  "version": "1.0.0",
+  "description": "A collection of JavaScript libraries for Minecraft Bedrock development",
+  "private": true,
+  "type": "module",
+  "license": "MIT",
+  "scripts": {
+    "check": "tsc -p jsconfig.json",
+    "test": "node --import ./tests/register.mjs --test tests/",
+    "format": "prettier --write \"**/*.{js,mjs}\"",
+    "format:check": "prettier --check \"**/*.{js,mjs}\""
+  },
+  "devDependencies": {
+    "@minecraft/server": "^2.10.0",
+    "prettier": "^3.0.0",
+    "typescript": ">=5.5.0"
+  }
+}

@@ -2,6 +2,16 @@
 // GitHub: https://github.com/leptr
 // Repo: https://github.com/leptr/bedrock-libs
 
+/**
+ * General rows-by-columns matrix. Elements are read and written as
+ * `m[row][col]`, or with `get(row, col)` and `set(row, col, value)`.
+ * Operations between two matrices throw a RangeError when their sizes do not fit.
+ *
+ * The values live in `data`, an array of rows. The numbered properties
+ * (`m[0]`, `m[1]`, ...) point at the same rows and are hidden from
+ * `Object.keys` and `JSON.stringify`, so a matrix has exactly three visible
+ * properties: `rows`, `cols` and `data`.
+ */
 export class Matrix {
   /**
    *
@@ -11,7 +21,35 @@ export class Matrix {
   constructor(rows, cols) {
     this.rows = rows;
     this.cols = cols;
-    for (let i = 0; i < this.rows; i++) this[i] = Array(this.cols).fill(0);
+    /** @type {number[][]} */
+    this.data = [];
+    for (let i = 0; i < this.rows; i++) {
+      const row = Array(this.cols).fill(0);
+      this.data.push(row);
+      Object.defineProperty(this, i, { value: row, enumerable: false });
+    }
+  }
+
+  /**
+   * Read one element.
+   * @param {Number} row
+   * @param {Number} col
+   * @returns {Number}
+   */
+  get(row, col) {
+    return this.data[row][col];
+  }
+
+  /**
+   * Write one element.
+   * @param {Number} row
+   * @param {Number} col
+   * @param {Number} value
+   * @returns {Matrix} This matrix.
+   */
+  set(row, col, value) {
+    this.data[row][col] = value;
+    return this;
   }
 
   copy() {
@@ -39,8 +77,9 @@ export class Matrix {
    */
   static subtract(a, b) {
     if (a.rows !== b.rows || a.cols !== b.cols) {
-      console.log("Columns and Rows of A must match Columns and Rows of B.");
-      return;
+      throw new RangeError(
+        "Columns and Rows of A must match Columns and Rows of B.",
+      );
     }
 
     return new Matrix(a.rows, a.cols).map((_, i, j) => a[i][j] - b[i][j]);
@@ -196,15 +235,10 @@ export class Matrix {
    * @param {Number} r2
    */
   swapRows(r1, r2) {
-    let temp1 = [];
-    let temp2 = [];
     for (let j = 0; j < this.cols; j++) {
-      temp1.push(this[r1][j]);
-      temp2.push(this[r2][j]);
-    }
-    for (let j = 0; j < this.cols; j++) {
-      this[r1][j] = temp1[j];
-      this[r2][j] = temp2[j];
+      const temp = this[r1][j];
+      this[r1][j] = this[r2][j];
+      this[r2][j] = temp;
     }
   }
 
@@ -214,35 +248,31 @@ export class Matrix {
    * @param {Number} c2
    */
   swapColumns(c1, c2) {
-    let temp1 = [];
-    let temp2 = [];
     for (let i = 0; i < this.rows; i++) {
-      temp1.push(this[i][c1]);
-      temp2.push(this[i][c2]);
-    }
-    for (let i = 0; i < this.rows; i++) {
-      this[i][c1] = temp1[i];
-      this[i][c2] = temp2[i];
+      const temp = this[i][c1];
+      this[i][c1] = this[i][c2];
+      this[i][c2] = temp;
     }
   }
 
   randomize() {
-    return this.map((e) => Math.random() * 2 - 1);
+    return this.map(e => Math.random() * 2 - 1);
   }
 
   /**
    *
-   * @param {Number} n
+   * @param {Number|Matrix} n A number to add to every element, or a matrix of the same size.
    */
   add(n) {
     if (n instanceof Matrix) {
       if (this.rows !== n.rows || this.cols !== n.cols) {
-        console.log("Columns and Rows of A must match Columns and Rows of B.");
-        return;
+        throw new RangeError(
+          "Columns and Rows of A must match Columns and Rows of B.",
+        );
       }
       return this.map((e, i, j) => e + n[i][j]);
     } else {
-      return this.map((e) => e + n);
+      return this.map(e => e + n);
     }
   }
 
@@ -262,8 +292,7 @@ export class Matrix {
   static multiply(a, b) {
     // Matrix product
     if (a.cols !== b.rows) {
-      console.log("Columns of A must match rows of B.");
-      return;
+      throw new RangeError("Columns of A must match rows of B.");
     }
 
     return new Matrix(a.rows, b.cols).map((e, i, j) => {
@@ -278,20 +307,21 @@ export class Matrix {
 
   /**
    *
-   * @param {Number} n
+   * @param {Number|Matrix} n A number to scale by, or a matrix of the same size for the element-wise product.
    */
   multiply(n) {
     if (n instanceof Matrix) {
       if (this.rows !== n.rows || this.cols !== n.cols) {
-        console.log("Columns and Rows of A must match Columns and Rows of B.");
-        return;
+        throw new RangeError(
+          "Columns and Rows of A must match Columns and Rows of B.",
+        );
       }
 
       // hadamard product
       return this.map((e, i, j) => e * n[i][j]);
     } else {
       // Scalar product
-      return this.map((e) => e * n);
+      return this.map(e => e * n);
     }
   }
 
@@ -317,7 +347,9 @@ export class Matrix {
    */
   static map(matrix, func) {
     // Apply a function to every element of matrix
-    return new Matrix(matrix.rows, matrix.cols).map((e, i, j) => func(matrix[i][j], i, j));
+    return new Matrix(matrix.rows, matrix.cols).map((e, i, j) =>
+      func(matrix[i][j], i, j),
+    );
   }
 
   serialize() {
@@ -326,15 +358,16 @@ export class Matrix {
 
   /**
    *
-   * @param {String} data
+   * @param {String|Object} data Output of serialize(), as a string or already parsed.
+   * @returns {Matrix}
    */
   static deserialize(data) {
     if (typeof data == "string") {
       data = JSON.parse(data);
     }
-    let matrix = new Matrix(data.rows, data.cols);
-    matrix = data;
-    return matrix;
+    // Matrices saved before `data` existed stored each row under its index.
+    const rows = data.data ?? data;
+    return new Matrix(data.rows, data.cols).map((_, i, j) => rows[i][j]);
   }
 
   max() {
